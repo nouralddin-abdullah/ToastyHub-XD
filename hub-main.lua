@@ -183,7 +183,10 @@ local isMobile = ViewportSize.X < 600 or ViewportSize.Y < 500
 
 local function calculateSize(viewportSize, mobile)
     if mobile then
-        return UDim2.new(0.95, 0, 0.85, 0) -- 95% width, 85% height on mobile
+        -- Mobile: narrower width (75%), taller height (80%)
+        local width = math.min(viewportSize.X * 0.75, 400) -- Max 400px or 75% of screen
+        local height = viewportSize.Y * 0.8 -- 80% height
+        return UDim2.fromOffset(width, height)
     else
         -- Calculate 70% of viewport but clamp between 500-650 width and 400-500 height
         local width = math.clamp(viewportSize.X * 0.7, 500, 650)
@@ -413,8 +416,15 @@ KeyInput.Parent = AuthContent
 Instance.new("UICorner", KeyInput).CornerRadius = UDim.new(0, 8)
 
 local CheckBtn = Instance.new("TextButton")
-CheckBtn.Size = UDim2.new(1, 0, 0, 40)
-CheckBtn.Position = UDim2.fromOffset(0, 105)
+if isMobile then
+    -- Mobile: full width button
+    CheckBtn.Size = UDim2.new(1, 0, 0, 40)
+    CheckBtn.Position = UDim2.fromOffset(0, 105)
+else
+    -- Desktop: keep original size
+    CheckBtn.Size = UDim2.new(1, 0, 0, 40)
+    CheckBtn.Position = UDim2.fromOffset(0, 105)
+end
 CheckBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 CheckBtn.Text = "✅ Verify Key"
 CheckBtn.Font = Enum.Font.GothamBold
@@ -425,10 +435,17 @@ CheckBtn.Parent = AuthContent
 Instance.new("UICorner", CheckBtn).CornerRadius = UDim.new(0, 8)
 
 local GetKeyBtn = Instance.new("TextButton")
-GetKeyBtn.Size = UDim2.new(1, 0, 0, 40)
-GetKeyBtn.Position = UDim2.fromOffset(0, 160)
+if isMobile then
+    -- Mobile: 48% width, left side
+    GetKeyBtn.Size = UDim2.new(0.48, 0, 0, 40)
+    GetKeyBtn.Position = UDim2.fromOffset(0, 160)
+else
+    -- Desktop: full width
+    GetKeyBtn.Size = UDim2.new(1, 0, 0, 40)
+    GetKeyBtn.Position = UDim2.fromOffset(0, 160)
+end
 GetKeyBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-GetKeyBtn.Text = "🔑 Get Key"
+GetKeyBtn.Text = isMobile and "🔑 Key" or "🔑 Get Key"
 GetKeyBtn.Font = Enum.Font.GothamBold
 GetKeyBtn.TextSize = 13
 GetKeyBtn.TextColor3 = Color3.new(1, 1, 1)
@@ -437,10 +454,17 @@ GetKeyBtn.Parent = AuthContent
 Instance.new("UICorner", GetKeyBtn).CornerRadius = UDim.new(0, 8)
 
 local DiscordBtn = Instance.new("TextButton")
-DiscordBtn.Size = UDim2.new(1, 0, 0, 40)
-DiscordBtn.Position = UDim2.fromOffset(0, 215)
+if isMobile then
+    -- Mobile: 48% width, right side (same row as Get Key)
+    DiscordBtn.Size = UDim2.new(0.48, 0, 0, 40)
+    DiscordBtn.Position = UDim2.new(0.52, 0, 0, 160)
+else
+    -- Desktop: full width below Get Key
+    DiscordBtn.Size = UDim2.new(1, 0, 0, 40)
+    DiscordBtn.Position = UDim2.fromOffset(0, 215)
+end
 DiscordBtn.BackgroundColor3 = Color3.fromRGB(114, 137, 218)
-DiscordBtn.Text = "💬 Discord"
+DiscordBtn.Text = isMobile and "💬 DC" or "💬 Discord"
 DiscordBtn.Font = Enum.Font.GothamBold
 DiscordBtn.TextSize = 13
 DiscordBtn.TextColor3 = Color3.new(1, 1, 1)
