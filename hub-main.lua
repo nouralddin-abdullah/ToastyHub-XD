@@ -229,6 +229,17 @@ Title.TextColor3 = Color3.new(1, 1, 1)
 Title.TextXAlignment = Enum.TextXAlignment.Left
 Title.Parent = Header
 
+local MinimizeBtn = Instance.new("TextButton")
+MinimizeBtn.Size = UDim2.fromOffset(35, 35)
+MinimizeBtn.Position = UDim2.new(1, -90, 0.5, -17.5)
+MinimizeBtn.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+MinimizeBtn.Text = "—"
+MinimizeBtn.Font = Enum.Font.GothamBold
+MinimizeBtn.TextSize = 16
+MinimizeBtn.TextColor3 = Color3.new(1, 1, 1)
+MinimizeBtn.Parent = Header
+Instance.new("UICorner", MinimizeBtn).CornerRadius = UDim.new(0, 8)
+
 local CloseBtn = Instance.new("TextButton")
 CloseBtn.Size = UDim2.fromOffset(35, 35)
 CloseBtn.Position = UDim2.new(1, -45, 0.5, -17.5)
@@ -244,6 +255,20 @@ CloseBtn.MouseButton1Click:Connect(function()
     Hub:Destroy()
 end)
 
+-- Minimized circle button
+local MinimizedCircle = Instance.new("TextButton")
+MinimizedCircle.Size = UDim2.fromOffset(60, 60)
+MinimizedCircle.AnchorPoint = Vector2.new(0.5, 0.5)
+MinimizedCircle.Position = UDim2.new(0.5, 0, 0.5, 0)
+MinimizedCircle.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+MinimizedCircle.Text = "🌟"
+MinimizedCircle.Font = Enum.Font.GothamBold
+MinimizedCircle.TextSize = 30
+MinimizedCircle.TextColor3 = Color3.new(1, 1, 1)
+MinimizedCircle.Visible = false
+MinimizedCircle.Parent = Hub
+Instance.new("UICorner", MinimizedCircle).CornerRadius = UDim.new(1, 0) -- Perfect circle
+
 -- Make window draggable
 local UserInputService = game:GetService("UserInputService")
 local dragging
@@ -253,7 +278,11 @@ local startPos
 
 local function update(input)
     local delta = input.Position - dragStart
-    Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    if Main.Visible then
+        Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    else
+        MinimizedCircle.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
 end
 
 Header.InputBegan:Connect(function(input)
@@ -276,10 +305,41 @@ Header.InputChanged:Connect(function(input)
     end
 end)
 
+MinimizedCircle.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = MinimizedCircle.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+MinimizedCircle.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
 UserInputService.InputChanged:Connect(function(input)
     if input == dragInput and dragging then
         update(input)
     end
+end)
+
+-- Minimize/Restore functionality
+MinimizeBtn.MouseButton1Click:Connect(function()
+    Main.Visible = false
+    MinimizedCircle.Visible = true
+end)
+
+MinimizedCircle.MouseButton1Click:Connect(function()
+    MinimizedCircle.Visible = false
+    Main.Visible = true
 end)
 
 -- Event Banner (if event is active)
@@ -417,18 +477,18 @@ Instance.new("UICorner", KeyInput).CornerRadius = UDim.new(0, 8)
 
 local CheckBtn = Instance.new("TextButton")
 if isMobile then
-    -- Mobile: full width button
-    CheckBtn.Size = UDim2.new(1, 0, 0, 40)
+    -- Mobile: 32% width, first in row
+    CheckBtn.Size = UDim2.new(0.31, 0, 0, 40)
     CheckBtn.Position = UDim2.fromOffset(0, 105)
 else
-    -- Desktop: keep original size
+    -- Desktop: full width
     CheckBtn.Size = UDim2.new(1, 0, 0, 40)
     CheckBtn.Position = UDim2.fromOffset(0, 105)
 end
 CheckBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-CheckBtn.Text = "✅ Verify Key"
+CheckBtn.Text = isMobile and "✅ Verify" or "✅ Verify Key"
 CheckBtn.Font = Enum.Font.GothamBold
-CheckBtn.TextSize = 13
+CheckBtn.TextSize = isMobile and 11 or 13
 CheckBtn.TextColor3 = Color3.new(1, 1, 1)
 CheckBtn.Visible = not IsAuthenticated
 CheckBtn.Parent = AuthContent
@@ -436,9 +496,9 @@ Instance.new("UICorner", CheckBtn).CornerRadius = UDim.new(0, 8)
 
 local GetKeyBtn = Instance.new("TextButton")
 if isMobile then
-    -- Mobile: 48% width, left side
-    GetKeyBtn.Size = UDim2.new(0.48, 0, 0, 40)
-    GetKeyBtn.Position = UDim2.fromOffset(0, 160)
+    -- Mobile: 32% width, middle in row
+    GetKeyBtn.Size = UDim2.new(0.31, 0, 0, 40)
+    GetKeyBtn.Position = UDim2.new(0.345, 0, 0, 105)
 else
     -- Desktop: full width
     GetKeyBtn.Size = UDim2.new(1, 0, 0, 40)
@@ -447,7 +507,7 @@ end
 GetKeyBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 GetKeyBtn.Text = isMobile and "🔑 Key" or "🔑 Get Key"
 GetKeyBtn.Font = Enum.Font.GothamBold
-GetKeyBtn.TextSize = 13
+GetKeyBtn.TextSize = isMobile and 11 or 13
 GetKeyBtn.TextColor3 = Color3.new(1, 1, 1)
 GetKeyBtn.Visible = not IsAuthenticated
 GetKeyBtn.Parent = AuthContent
@@ -455,9 +515,9 @@ Instance.new("UICorner", GetKeyBtn).CornerRadius = UDim.new(0, 8)
 
 local DiscordBtn = Instance.new("TextButton")
 if isMobile then
-    -- Mobile: 48% width, right side (same row as Get Key)
-    DiscordBtn.Size = UDim2.new(0.48, 0, 0, 40)
-    DiscordBtn.Position = UDim2.new(0.52, 0, 0, 160)
+    -- Mobile: 32% width, last in row (all 3 buttons in same line)
+    DiscordBtn.Size = UDim2.new(0.31, 0, 0, 40)
+    DiscordBtn.Position = UDim2.new(0.69, 0, 0, 105)
 else
     -- Desktop: full width below Get Key
     DiscordBtn.Size = UDim2.new(1, 0, 0, 40)
@@ -466,7 +526,7 @@ end
 DiscordBtn.BackgroundColor3 = Color3.fromRGB(114, 137, 218)
 DiscordBtn.Text = isMobile and "💬 DC" or "💬 Discord"
 DiscordBtn.Font = Enum.Font.GothamBold
-DiscordBtn.TextSize = 13
+DiscordBtn.TextSize = isMobile and 11 or 13
 DiscordBtn.TextColor3 = Color3.new(1, 1, 1)
 DiscordBtn.Parent = AuthContent
 Instance.new("UICorner", DiscordBtn).CornerRadius = UDim.new(0, 8)
