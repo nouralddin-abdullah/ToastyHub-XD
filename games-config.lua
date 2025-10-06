@@ -16,6 +16,6 @@ return {
         gameId = 123456789, -- Replace with actual game ID
         scriptUrl = "https://raw.githubusercontent.com/nouralddin-abdullah/Plants-Vs-Brainrots/refs/heads/main/main.lua",
         premium = false, -- true = requires key, false = free
-        icon = "🪴"
+        icon = "☘️"
     }
 }
