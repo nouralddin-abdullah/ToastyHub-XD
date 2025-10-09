@@ -1,8 +1,3 @@
--- ################################# --
--- ##     Games Configuration     ## --
--- ################################# --
-
--- Simply add or remove games from this list
 return {
     {
         name = "99 Nights (EXECUTE IN FOREST ✅ NOT LOBBY ❌)",
