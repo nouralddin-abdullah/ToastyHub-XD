@@ -1,3 +1,19 @@
+--[[
+    ToastyUI v1.0.0 - Professional GUI Library for Roblox
+    Created by ToastyxDD & GitHub Copilot
+    
+    ⚠️ ANTI-DETECTION FEATURES:
+    - No exploit function checks (no protectgui, gethui, syn)
+    - Pure Roblox Instance.new() only
+    - No file system operations
+    - Works in Basketball: Zero without kicks!
+    
+    📚 USAGE:
+    local ToastyUI = loadstring(game:HttpGet("your-url"))()
+    local Window = ToastyUI:CreateWindow({...})
+]]
+
+-- Services
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -131,7 +147,7 @@ function ToastyUI:Notify(config)
         Name = "Notification",
         Parent = NotificationContainer,
         Size = UDim2.new(1, 0, 0, 0),
-        BackgroundColor3 = CurrentTheme.Secondary,
+        BackgroundColor3 = self.CurrentTheme.Secondary,
         BorderSizePixel = 0,
         ClipsDescendants = true,
     }, {
@@ -153,7 +169,7 @@ function ToastyUI:Notify(config)
                 Size = UDim2.new(1, 0, 0, 20),
                 BackgroundTransparency = 1,
                 Text = title,
-                TextColor3 = CurrentTheme.Text,
+                TextColor3 = self.CurrentTheme.Text,
                 TextSize = 16,
                 Font = Enum.Font.GothamBold,
                 TextXAlignment = Enum.TextXAlignment.Left,
@@ -164,7 +180,7 @@ function ToastyUI:Notify(config)
                 Position = UDim2.new(0, 0, 0, 25),
                 BackgroundTransparency = 1,
                 Text = content,
-                TextColor3 = CurrentTheme.TextDark,
+                TextColor3 = self.CurrentTheme.TextDark,
                 TextSize = 14,
                 Font = Enum.Font.Gotham,
                 TextXAlignment = Enum.TextXAlignment.Left,
@@ -514,7 +530,11 @@ function ToastyUI:CreateWindow(config)
         
         -- Set as first tab
         if not WindowObject.CurrentTab then
-            TabButton.MouseButton1Click:Fire()
+            -- Manually trigger first tab selection
+            TabContent.Visible = true
+            TabButton.BackgroundColor3 = ToastyUI.CurrentTheme.Accent
+            TabButton.Label.TextColor3 = ToastyUI.CurrentTheme.Text
+            WindowObject.CurrentTab = TabObject
         end
         
         table.insert(WindowObject.Tabs, TabObject)
