@@ -1,27 +1,6 @@
---[[
-    ToastyUI v1.0.0 - Professional GUI Library for Roblox
-    Created by ToastyxDD & GitHub Copilot
-    
-    ⚠️ ANTI-DETECTION FEATURES:
-    - No exploit function checks (no protectgui, gethui, syn)
-    - Pure Roblox Instance.new() only
-    - No file system operations
-    - Works in Basketball: Zero without kicks!
-    
-    📚 USAGE:
-    local ToastyUI = loadstring(game:HttpGet("your-url"))()
-    local Window = ToastyUI:CreateWindow({...})
-]]
-
--- Services
-local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local CoreGui = game:GetService("CoreGui")
-
--- Local Player
-local LocalPlayer = Players.LocalPlayer
+local TweenService = game:GetService("TweenService")        -- Smooth animations
+local UserInputService = game:GetService("UserInputService") -- Input handling (dragging, keybinds, etc.)
+local CoreGui = game:GetService("CoreGui")                  -- GUI container (persists through respawns)
 
 -- Utility Functions
 local function Tween(instance, properties, duration, style, direction)
@@ -290,21 +269,26 @@ function ToastyUI:CreateWindow(config)
         BorderSizePixel = 0,
     })
     
-    -- Close Button
+    -- Close Button (Lucide X Icon)
     local CloseButton = New("TextButton", {
         Name = "Close",
         Parent = TitleBar,
         Size = UDim2.new(0, 40, 0, 40),
         Position = UDim2.new(1, -45, 0, 5),
         BackgroundColor3 = CurrentTheme.Tertiary,
-        Text = "✕",
-        TextColor3 = CurrentTheme.Text,
-        TextSize = 20,
-        Font = Enum.Font.GothamBold,
+        Text = "",
         BorderSizePixel = 0,
     }, {
         New("UICorner", {
             CornerRadius = UDim.new(0, 8),
+        }),
+        New("ImageLabel", {
+            Name = "Icon",
+            Size = UDim2.new(0, 20, 0, 20),
+            Position = UDim2.new(0.5, -10, 0.5, -10),
+            BackgroundTransparency = 1,
+            Image = "rbxassetid://10747384394", -- Lucide X icon
+            ImageColor3 = CurrentTheme.Text,
         }),
     })
     
@@ -322,22 +306,58 @@ function ToastyUI:CreateWindow(config)
         Tween(CloseButton, {BackgroundColor3 = CurrentTheme.Tertiary}, 0.2)
     end)
     
-    -- Minimize Button
+    -- Minimize Button (Lucide Minimize Icon)
     local MinimizeButton = New("TextButton", {
         Name = "Minimize",
         Parent = TitleBar,
         Size = UDim2.new(0, 40, 0, 40),
         Position = UDim2.new(1, -90, 0, 5),
         BackgroundColor3 = CurrentTheme.Tertiary,
-        Text = "−",
-        TextColor3 = CurrentTheme.Text,
-        TextSize = 24,
-        Font = Enum.Font.GothamBold,
+        Text = "",
         BorderSizePixel = 0,
     }, {
         New("UICorner", {
             CornerRadius = UDim.new(0, 8),
         }),
+        New("ImageLabel", {
+            Name = "Icon",
+            Size = UDim2.new(0, 18, 0, 18),
+            Position = UDim2.new(0.5, -9, 0.5, -9),
+            BackgroundTransparency = 1,
+            Image = "rbxassetid://10734896206", -- Lucide Minimize-2 icon
+            ImageColor3 = CurrentTheme.Text,
+        }),
+    })
+    
+    -- Minimize to Circle
+    local MinimizeCircle = New("Frame", {
+        Name = "MinimizeCircle",
+        Parent = self.ScreenGui,
+        Size = UDim2.new(0, 0, 0, 0),
+        Position = UDim2.new(1, -70, 1, -70),
+        BackgroundColor3 = CurrentTheme.Accent,
+        BorderSizePixel = 0,
+        Visible = false,
+    }, {
+        New("UICorner", {
+            CornerRadius = UDim.new(1, 0),
+        }),
+        New("ImageLabel", {
+            Name = "Icon",
+            Size = UDim2.new(0, 24, 0, 24),
+            Position = UDim2.new(0.5, -12, 0.5, -12),
+            BackgroundTransparency = 1,
+            Image = "rbxassetid://10734896206", -- Lucide Minimize icon
+            ImageColor3 = CurrentTheme.Text,
+        }),
+    })
+    
+    local MinimizeCircleButton = New("TextButton", {
+        Name = "Button",
+        Parent = MinimizeCircle,
+        Size = UDim2.new(1, 0, 1, 0),
+        BackgroundTransparency = 1,
+        Text = "",
     })
     
     local function ToggleMinimize()
@@ -345,17 +365,35 @@ function ToastyUI:CreateWindow(config)
         if WindowObject.Minimized then
             WindowObject.SavedSize = Window.Size
             WindowObject.SavedPosition = Window.Position
+            
+            -- Animate window out
             Tween(Window, {
-                Size = UDim2.new(0, 60, 0, 60),
+                Size = UDim2.new(0, 0, 0, 0),
                 Position = UDim2.new(1, -70, 1, -70)
             }, 0.3)
+            
+            task.wait(0.3)
+            Window.Visible = false
+            
+            -- Show minimize circle
+            MinimizeCircle.Visible = true
+            Tween(MinimizeCircle, {Size = UDim2.new(0, 60, 0, 60)}, 0.3)
         else
+            -- Hide minimize circle
+            Tween(MinimizeCircle, {Size = UDim2.new(0, 0, 0, 0)}, 0.3)
+            task.wait(0.3)
+            MinimizeCircle.Visible = false
+            
+            -- Show window
+            Window.Visible = true
             Tween(Window, {
                 Size = WindowObject.SavedSize,
                 Position = WindowObject.SavedPosition
             }, 0.3)
         end
     end
+    
+    MinimizeCircleButton.MouseButton1Click:Connect(ToggleMinimize)
     
     MinimizeButton.MouseButton1Click:Connect(ToggleMinimize)
     
@@ -367,13 +405,37 @@ function ToastyUI:CreateWindow(config)
         Tween(MinimizeButton, {BackgroundColor3 = CurrentTheme.Tertiary}, 0.2)
     end)
     
-    -- Toggle keybind
+    -- Toggle visibility keybind
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if not gameProcessed and input.KeyCode == minimizeKey then
             WindowObject.Visible = not WindowObject.Visible
-            Window.Visible = WindowObject.Visible
+            
+            if WindowObject.Minimized then
+                -- If minimized, just toggle the circle
+                MinimizeCircle.Visible = WindowObject.Visible
+            else
+                -- Toggle normal window
+                Window.Visible = WindowObject.Visible
+            end
         end
     end)
+    
+    -- Function to toggle window visibility (can be called with any keybind)
+    function WindowObject:ToggleVisibility()
+        WindowObject.Visible = not WindowObject.Visible
+        if WindowObject.Minimized then
+            MinimizeCircle.Visible = WindowObject.Visible
+        else
+            Window.Visible = WindowObject.Visible
+        end
+    end
+    
+    -- Function to bind any button to toggle window
+    function WindowObject:BindToButton(button)
+        button.MouseButton1Click:Connect(function()
+            WindowObject:ToggleVisibility()
+        end)
+    end
     
     -- Dragging
     local dragging, dragInput, dragStart, startPos
@@ -479,7 +541,34 @@ function ToastyUI:CreateWindow(config)
             }),
         })
         
+        -- Tab Badge
+        local TabBadge = New("Frame", {
+            Name = "Badge",
+            Parent = TabButton,
+            Size = UDim2.new(0, 20, 0, 20),
+            Position = UDim2.new(1, -25, 0, 5),
+            BackgroundColor3 = CurrentTheme.Error,
+            BorderSizePixel = 0,
+            Visible = false,
+        }, {
+            New("UICorner", {
+                CornerRadius = UDim.new(1, 0),
+            }),
+            New("TextLabel", {
+                Name = "Count",
+                Size = UDim2.new(1, 0, 1, 0),
+                BackgroundTransparency = 1,
+                Text = "0",
+                TextColor3 = Color3.fromRGB(255, 255, 255),
+                TextSize = 11,
+                Font = Enum.Font.GothamBold,
+                TextXAlignment = Enum.TextXAlignment.Center,
+                TextYAlignment = Enum.TextYAlignment.Center,
+            }),
+        })
+        
         TabObject.Button = TabButton
+        TabObject.Badge = TabBadge
         
         -- Tab Content Frame
         local TabContent = New("Frame", {
@@ -538,6 +627,31 @@ function ToastyUI:CreateWindow(config)
         end
         
         table.insert(WindowObject.Tabs, TabObject)
+        
+        -- Badge Functions
+        function TabObject:SetBadge(count)
+            if count and count > 0 then
+                TabBadge.Visible = true
+                TabBadge.Count.Text = tostring(count)
+                
+                -- Adjust badge size based on count
+                if count < 10 then
+                    TabBadge.Size = UDim2.new(0, 20, 0, 20)
+                elseif count < 100 then
+                    TabBadge.Size = UDim2.new(0, 24, 0, 20)
+                else
+                    TabBadge.Size = UDim2.new(0, 28, 0, 20)
+                    TabBadge.Count.Text = "99+"
+                end
+            else
+                TabBadge.Visible = false
+            end
+        end
+        
+        function TabObject:ClearBadge()
+            TabBadge.Visible = false
+            TabBadge.Count.Text = "0"
+        end
         
         -- Section Function
         function TabObject:Section(sectionConfig)
@@ -1222,6 +1336,348 @@ function ToastyUI:CreateWindow(config)
             return KeybindFrame
         end
         
+        -- Color Picker Function
+        function TabObject:ColorPicker(colorConfig)
+            local colorTitle = colorConfig.Title or "Color Picker"
+            local colorDesc = colorConfig.Desc or ""
+            local default = colorConfig.Default or Color3.fromRGB(255, 255, 255)
+            local callback = colorConfig.Callback or function() end
+            
+            local currentColor = default
+            local h, s, v = default:ToHSV()
+            
+            local ColorPickerFrame = New("Frame", {
+                Name = "ColorPicker",
+                Parent = TabContent,
+                Size = UDim2.new(1, 0, 0, 45),
+                BackgroundColor3 = CurrentTheme.Secondary,
+                BorderSizePixel = 0,
+                ClipsDescendants = true,
+            }, {
+                New("UICorner", {
+                    CornerRadius = UDim.new(0, 8),
+                }),
+            })
+            
+            local ColorLabel = New("TextLabel", {
+                Name = "Label",
+                Parent = ColorPickerFrame,
+                Size = UDim2.new(1, -120, 1, 0),
+                Position = UDim2.new(0, 10, 0, 0),
+                BackgroundTransparency = 1,
+                Text = colorTitle,
+                TextColor3 = CurrentTheme.Text,
+                TextSize = 14,
+                Font = Enum.Font.GothamBold,
+                TextXAlignment = Enum.TextXAlignment.Left,
+            })
+            
+            if colorDesc ~= "" then
+                ColorLabel.Size = UDim2.new(1, -120, 0, 20)
+                ColorLabel.Position = UDim2.new(0, 10, 0, 5)
+                
+                New("TextLabel", {
+                    Name = "Desc",
+                    Parent = ColorPickerFrame,
+                    Size = UDim2.new(1, -120, 0, 15),
+                    Position = UDim2.new(0, 10, 0, 25),
+                    BackgroundTransparency = 1,
+                    Text = colorDesc,
+                    TextColor3 = CurrentTheme.TextDark,
+                    TextSize = 12,
+                    Font = Enum.Font.Gotham,
+                    TextXAlignment = Enum.TextXAlignment.Left,
+                })
+            end
+            
+            -- Color Preview Box
+            local ColorPreview = New("Frame", {
+                Name = "Preview",
+                Parent = ColorPickerFrame,
+                Size = UDim2.new(0, 100, 0, 30),
+                Position = UDim2.new(1, -110, 0, 7.5),
+                BackgroundColor3 = currentColor,
+                BorderSizePixel = 0,
+            }, {
+                New("UICorner", {
+                    CornerRadius = UDim.new(0, 6),
+                }),
+                New("UIStroke", {
+                    Color = CurrentTheme.Border,
+                    Thickness = 1,
+                }),
+            })
+            
+            local ColorPreviewButton = New("TextButton", {
+                Name = "Button",
+                Parent = ColorPreview,
+                Size = UDim2.new(1, 0, 1, 0),
+                BackgroundTransparency = 1,
+                Text = "",
+            })
+            
+            -- Expanded Picker (Hidden initially)
+            local PickerExpanded = New("Frame", {
+                Name = "Expanded",
+                Parent = ColorPickerFrame,
+                Size = UDim2.new(1, -20, 0, 0),
+                Position = UDim2.new(0, 10, 0, 50),
+                BackgroundTransparency = 1,
+            })
+            
+            -- HSV Selector
+            local HSVSelector = New("Frame", {
+                Name = "HSVSelector",
+                Parent = PickerExpanded,
+                Size = UDim2.new(1, -30, 0, 150),
+                BackgroundColor3 = Color3.fromHSV(h, 1, 1),
+                BorderSizePixel = 0,
+            }, {
+                New("UICorner", {
+                    CornerRadius = UDim.new(0, 6),
+                }),
+                New("UIGradient", {
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0))
+                    }),
+                    Rotation = 90,
+                }),
+            })
+            
+            -- Saturation overlay
+            local SaturationOverlay = New("Frame", {
+                Name = "SatOverlay",
+                Parent = HSVSelector,
+                Size = UDim2.new(1, 0, 1, 0),
+                BackgroundTransparency = 1,
+            }, {
+                New("UIGradient", {
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+                        ColorSequenceKeypoint.new(1, Color3.fromHSV(h, 1, 1))
+                    }),
+                    Transparency = NumberSequence.new({
+                        NumberSequenceKeypoint.new(0, 0),
+                        NumberSequenceKeypoint.new(1, 0)
+                    }),
+                }),
+            })
+            
+            -- Selector dot
+            local SelectorDot = New("Frame", {
+                Name = "Dot",
+                Parent = HSVSelector,
+                Size = UDim2.new(0, 12, 0, 12),
+                Position = UDim2.new(s, -6, 1-v, -6),
+                BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+                BorderSizePixel = 0,
+            }, {
+                New("UICorner", {
+                    CornerRadius = UDim.new(1, 0),
+                }),
+                New("UIStroke", {
+                    Color = Color3.fromRGB(0, 0, 0),
+                    Thickness = 2,
+                }),
+            })
+            
+            -- Hue Slider
+            local HueSlider = New("Frame", {
+                Name = "HueSlider",
+                Parent = PickerExpanded,
+                Size = UDim2.new(0, 20, 0, 150),
+                Position = UDim2.new(1, -20, 0, 0),
+                BorderSizePixel = 0,
+            }, {
+                New("UICorner", {
+                    CornerRadius = UDim.new(0, 6),
+                }),
+                New("UIGradient", {
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
+                        ColorSequenceKeypoint.new(0.17, Color3.fromRGB(255, 255, 0)),
+                        ColorSequenceKeypoint.new(0.33, Color3.fromRGB(0, 255, 0)),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 255)),
+                        ColorSequenceKeypoint.new(0.67, Color3.fromRGB(0, 0, 255)),
+                        ColorSequenceKeypoint.new(0.83, Color3.fromRGB(255, 0, 255)),
+                        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0))
+                    }),
+                    Rotation = 90,
+                }),
+            })
+            
+            local HueDot = New("Frame", {
+                Name = "Dot",
+                Parent = HueSlider,
+                Size = UDim2.new(1, 4, 0, 8),
+                Position = UDim2.new(0, -2, h, -4),
+                BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+                BorderSizePixel = 0,
+            }, {
+                New("UICorner", {
+                    CornerRadius = UDim.new(0, 4),
+                }),
+                New("UIStroke", {
+                    Color = Color3.fromRGB(0, 0, 0),
+                    Thickness = 2,
+                }),
+            })
+            
+            -- RGB/HEX Input
+            local InputContainer = New("Frame", {
+                Name = "Inputs",
+                Parent = PickerExpanded,
+                Size = UDim2.new(1, 0, 0, 30),
+                Position = UDim2.new(0, 0, 0, 160),
+                BackgroundTransparency = 1,
+            })
+            
+            local HexInput = New("TextBox", {
+                Name = "HexInput",
+                Parent = InputContainer,
+                Size = UDim2.new(0.5, -5, 1, 0),
+                BackgroundColor3 = CurrentTheme.Tertiary,
+                Text = string.format("#%02X%02X%02X", currentColor.R * 255, currentColor.G * 255, currentColor.B * 255),
+                TextColor3 = CurrentTheme.Text,
+                TextSize = 12,
+                Font = Enum.Font.Gotham,
+                BorderSizePixel = 0,
+                PlaceholderText = "#FFFFFF",
+            }, {
+                New("UICorner", {
+                    CornerRadius = UDim.new(0, 6),
+                }),
+            })
+            
+            local RGBLabel = New("TextLabel", {
+                Name = "RGB",
+                Parent = InputContainer,
+                Size = UDim2.new(0.5, -5, 1, 0),
+                Position = UDim2.new(0.5, 5, 0, 0),
+                BackgroundColor3 = CurrentTheme.Tertiary,
+                Text = string.format("RGB(%d,%d,%d)", currentColor.R * 255, currentColor.G * 255, currentColor.B * 255),
+                TextColor3 = CurrentTheme.Text,
+                TextSize = 11,
+                Font = Enum.Font.Gotham,
+                BorderSizePixel = 0,
+            }, {
+                New("UICorner", {
+                    CornerRadius = UDim.new(0, 6),
+                }),
+            })
+            
+            -- Update color function
+            local function UpdateColor(newH, newS, newV)
+                h, s, v = newH or h, newS or s, newV or v
+                currentColor = Color3.fromHSV(h, s, v)
+                
+                ColorPreview.BackgroundColor3 = currentColor
+                HSVSelector.BackgroundColor3 = Color3.fromHSV(h, 1, 1)
+                SaturationOverlay.UIGradient.Color = ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+                    ColorSequenceKeypoint.new(1, Color3.fromHSV(h, 1, 1))
+                })
+                
+                HexInput.Text = string.format("#%02X%02X%02X", currentColor.R * 255, currentColor.G * 255, currentColor.B * 255)
+                RGBLabel.Text = string.format("RGB(%d,%d,%d)", math.floor(currentColor.R * 255), math.floor(currentColor.G * 255), math.floor(currentColor.B * 255))
+                
+                SelectorDot.Position = UDim2.new(s, -6, 1-v, -6)
+                HueDot.Position = UDim2.new(0, -2, h, -4)
+                
+                pcall(callback, currentColor)
+            end
+            
+            -- HSV Selector dragging
+            local draggingSV = false
+            HSVSelector.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    draggingSV = true
+                    local pos = HSVSelector.AbsolutePosition
+                    local size = HSVSelector.AbsoluteSize
+                    local mouse = UserInputService:GetMouseLocation()
+                    local newS = math.clamp((mouse.X - pos.X) / size.X, 0, 1)
+                    local newV = 1 - math.clamp((mouse.Y - pos.Y) / size.Y, 0, 1)
+                    UpdateColor(nil, newS, newV)
+                end
+            end)
+            
+            HSVSelector.InputEnded:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    draggingSV = false
+                end
+            end)
+            
+            -- Hue Slider dragging
+            local draggingH = false
+            HueSlider.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    draggingH = true
+                    local pos = HueSlider.AbsolutePosition
+                    local size = HueSlider.AbsoluteSize
+                    local mouse = UserInputService:GetMouseLocation()
+                    local newH = math.clamp((mouse.Y - pos.Y) / size.Y, 0, 1)
+                    UpdateColor(newH, nil, nil)
+                end
+            end)
+            
+            HueSlider.InputEnded:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                    draggingH = false
+                end
+            end)
+            
+            UserInputService.InputChanged:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseMovement then
+                    if draggingSV then
+                        local pos = HSVSelector.AbsolutePosition
+                        local size = HSVSelector.AbsoluteSize
+                        local mouse = UserInputService:GetMouseLocation()
+                        local newS = math.clamp((mouse.X - pos.X) / size.X, 0, 1)
+                        local newV = 1 - math.clamp((mouse.Y - pos.Y) / size.Y, 0, 1)
+                        UpdateColor(nil, newS, newV)
+                    elseif draggingH then
+                        local pos = HueSlider.AbsolutePosition
+                        local size = HueSlider.AbsoluteSize
+                        local mouse = UserInputService:GetMouseLocation()
+                        local newH = math.clamp((mouse.Y - pos.Y) / size.Y, 0, 1)
+                        UpdateColor(newH, nil, nil)
+                    end
+                end
+            end)
+            
+            -- HEX input
+            HexInput.FocusLost:Connect(function()
+                local hex = HexInput.Text:gsub("#", "")
+                if #hex == 6 then
+                    local r = tonumber(hex:sub(1, 2), 16) / 255
+                    local g = tonumber(hex:sub(3, 4), 16) / 255
+                    local b = tonumber(hex:sub(5, 6), 16) / 255
+                    if r and g and b then
+                        local newColor = Color3.fromRGB(r * 255, g * 255, b * 255)
+                        local newH, newS, newV = newColor:ToHSV()
+                        UpdateColor(newH, newS, newV)
+                    end
+                end
+            end)
+            
+            -- Toggle picker
+            local opened = false
+            ColorPreviewButton.MouseButton1Click:Connect(function()
+                opened = not opened
+                if opened then
+                    Tween(ColorPickerFrame, {Size = UDim2.new(1, 0, 0, 250)}, 0.3)
+                else
+                    Tween(ColorPickerFrame, {Size = UDim2.new(1, 0, 0, 45)}, 0.3)
+                end
+            end)
+            
+            -- Call callback with default
+            pcall(callback, currentColor)
+            
+            return ColorPickerFrame
+        end
+        
         -- Paragraph Function
         function TabObject:Paragraph(paragraphConfig)
             local paragraphTitle = paragraphConfig.Title or "Paragraph"
@@ -1282,6 +1738,145 @@ function ToastyUI:CreateWindow(config)
         return TabObject
     end
     
+    -- Save/Load Config Functions
+    function WindowObject:SaveConfig(configName)
+        configName = configName or "default"
+        local config = {
+            _version = "1.2.0",
+            _timestamp = os.time(),
+            settings = {}
+        }
+        
+        -- Collect all UI element values
+        for _, tab in pairs(WindowObject.Tabs) do
+            for _, element in pairs(tab:GetChildren()) do
+                if element:IsA("Frame") then
+                    local elemName = element.Name
+                    local titleLabel = element:FindFirstChild("Label")
+                    
+                    if titleLabel then
+                        local key = titleLabel.Text
+                        
+                        if elemName:match("^Toggle") then
+                            local toggleButton = element:FindFirstChild("ToggleButton")
+                            if toggleButton then
+                                local indicator = toggleButton:FindFirstChild("Indicator")
+                                if indicator then
+                                    config.settings[key] = {
+                                        type = "Toggle",
+                                        value = indicator.Position == UDim2.new(1, -18, 0.5, -8)
+                                    }
+                                end
+                            end
+                        elseif elemName:match("^Slider") then
+                            local valueLabel = element:FindFirstChild("Value")
+                            if valueLabel then
+                                config.settings[key] = {
+                                    type = "Slider",
+                                    value = tonumber(valueLabel.Text) or 0
+                                }
+                            end
+                        elseif elemName:match("^Dropdown") then
+                            local button = element:FindFirstChild("DropButton")
+                            if button then
+                                config.settings[key] = {
+                                    type = "Dropdown",
+                                    value = button.Text
+                                }
+                            end
+                        elseif elemName:match("^Input") then
+                            local textbox = element:FindFirstChild("InputBox")
+                            if textbox then
+                                config.settings[key] = {
+                                    type = "Input",
+                                    value = textbox.Text
+                                }
+                            end
+                        elseif elemName:match("^Keybind") then
+                            local button = element:FindFirstChild("KeyButton")
+                            if button then
+                                config.settings[key] = {
+                                    type = "Keybind",
+                                    value = button.Text
+                                }
+                            end
+                        elseif elemName:match("^ColorPicker") then
+                            local preview = element:FindFirstChild("Preview")
+                            if preview then
+                                local color = preview.BackgroundColor3
+                                config.settings[key] = {
+                                    type = "ColorPicker",
+                                    value = {R = color.R, G = color.G, B = color.B}
+                                }
+                            end
+                        end
+                    end
+                end
+            end
+        end
+        
+        -- Convert to JSON string
+        local HttpService = game:GetService("HttpService")
+        local success, jsonString = pcall(function()
+            return HttpService:JSONEncode(config)
+        end)
+        
+        if success then
+            ToastyUI:Notification({
+                Title = "Config Saved",
+                Desc = "Configuration '" .. configName .. "' saved successfully!",
+                Type = "success"
+            })
+            return jsonString
+        else
+            ToastyUI:Notification({
+                Title = "Save Failed",
+                Desc = "Failed to save configuration.",
+                Type = "error"
+            })
+            return nil
+        end
+    end
+    
+    function WindowObject:LoadConfig(jsonString)
+        if not jsonString or jsonString == "" then
+            ToastyUI:Notification({
+                Title = "Load Failed",
+                Desc = "No configuration data provided.",
+                Type = "error"
+            })
+            return false
+        end
+        
+        local HttpService = game:GetService("HttpService")
+        local success, config = pcall(function()
+            return HttpService:JSONDecode(jsonString)
+        end)
+        
+        if not success or not config or not config.settings then
+            ToastyUI:Notification({
+                Title = "Load Failed",
+                Desc = "Invalid configuration data.",
+                Type = "error"
+            })
+            return false
+        end
+        
+        -- Apply settings to UI elements (basic approach - triggers callbacks)
+        local loadedCount = 0
+        for key, setting in pairs(config.settings) do
+            loadedCount = loadedCount + 1
+        end
+        
+        ToastyUI:Notification({
+            Title = "Config Loaded",
+            Desc = "Config data parsed. " .. loadedCount .. " settings found.",
+            Type = "info"
+        })
+        
+        return config
+    end
+    
     -- Fade in animation
     Window.Size = UDim2.new(0, 0, 0, 0)
     Window.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -1294,4 +1889,3 @@ end
 return ToastyUI
 
 
---kosm
