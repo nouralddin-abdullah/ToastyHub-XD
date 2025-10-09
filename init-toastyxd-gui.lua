@@ -1,19 +1,3 @@
---[[
-    ToastyUI v1.0.0 - Professional GUI Library for Roblox
-    Created by ToastyxDD & GitHub Copilot
-    
-    ⚠️ ANTI-DETECTION FEATURES:
-    - No exploit function checks (no protectgui, gethui, syn)
-    - Pure Roblox Instance.new() only
-    - No file system operations
-    - Works in Basketball: Zero without kicks!
-    
-    📚 USAGE:
-    local ToastyUI = loadstring(game:HttpGet("your-url"))()
-    local Window = ToastyUI:CreateWindow({...})
-]]
-
--- Services
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -147,7 +131,7 @@ function ToastyUI:Notify(config)
         Name = "Notification",
         Parent = NotificationContainer,
         Size = UDim2.new(1, 0, 0, 0),
-        BackgroundColor3 = self.CurrentTheme.Secondary,
+        BackgroundColor3 = CurrentTheme.Secondary,
         BorderSizePixel = 0,
         ClipsDescendants = true,
     }, {
@@ -169,7 +153,7 @@ function ToastyUI:Notify(config)
                 Size = UDim2.new(1, 0, 0, 20),
                 BackgroundTransparency = 1,
                 Text = title,
-                TextColor3 = self.CurrentTheme.Text,
+                TextColor3 = CurrentTheme.Text,
                 TextSize = 16,
                 Font = Enum.Font.GothamBold,
                 TextXAlignment = Enum.TextXAlignment.Left,
@@ -180,7 +164,7 @@ function ToastyUI:Notify(config)
                 Position = UDim2.new(0, 0, 0, 25),
                 BackgroundTransparency = 1,
                 Text = content,
-                TextColor3 = self.CurrentTheme.TextDark,
+                TextColor3 = CurrentTheme.TextDark,
                 TextSize = 14,
                 Font = Enum.Font.Gotham,
                 TextXAlignment = Enum.TextXAlignment.Left,
@@ -216,6 +200,7 @@ function ToastyUI:CreateWindow(config)
     
     -- Set theme
     self.CurrentTheme = Themes[theme] or Themes.Dark
+    local CurrentTheme = self.CurrentTheme  -- Store reference for nested functions
     
     -- Window Object
     local WindowObject = {
@@ -250,7 +235,7 @@ function ToastyUI:CreateWindow(config)
         Name = "TitleBar",
         Parent = Window,
         Size = UDim2.new(1, 0, 0, 50),
-        BackgroundColor3 = self.CurrentTheme.Secondary,
+        BackgroundColor3 = CurrentTheme.Secondary,
         BorderSizePixel = 0,
     }, {
         New("UICorner", {
@@ -262,7 +247,7 @@ function ToastyUI:CreateWindow(config)
             Position = UDim2.new(0, 15, 0, 0),
             BackgroundTransparency = 1,
             Text = title,
-            TextColor3 = self.CurrentTheme.Text,
+            TextColor3 = CurrentTheme.Text,
             TextSize = 18,
             Font = Enum.Font.GothamBold,
             TextXAlignment = Enum.TextXAlignment.Left,
@@ -273,7 +258,7 @@ function ToastyUI:CreateWindow(config)
             Position = UDim2.new(0, 220, 0, 0),
             BackgroundTransparency = 1,
             Text = subtitle,
-            TextColor3 = self.CurrentTheme.TextDark,
+            TextColor3 = CurrentTheme.TextDark,
             TextSize = 14,
             Font = Enum.Font.Gotham,
             TextXAlignment = Enum.TextXAlignment.Left,
@@ -285,7 +270,7 @@ function ToastyUI:CreateWindow(config)
         Parent = TitleBar,
         Size = UDim2.new(1, 0, 0, 12),
         Position = UDim2.new(0, 0, 1, -12),
-        BackgroundColor3 = self.CurrentTheme.Secondary,
+        BackgroundColor3 = CurrentTheme.Secondary,
         BorderSizePixel = 0,
     })
     
@@ -295,9 +280,9 @@ function ToastyUI:CreateWindow(config)
         Parent = TitleBar,
         Size = UDim2.new(0, 40, 0, 40),
         Position = UDim2.new(1, -45, 0, 5),
-        BackgroundColor3 = self.CurrentTheme.Tertiary,
+        BackgroundColor3 = CurrentTheme.Tertiary,
         Text = "✕",
-        TextColor3 = self.CurrentTheme.Text,
+        TextColor3 = CurrentTheme.Text,
         TextSize = 20,
         Font = Enum.Font.GothamBold,
         BorderSizePixel = 0,
@@ -314,11 +299,11 @@ function ToastyUI:CreateWindow(config)
     end)
     
     CloseButton.MouseEnter:Connect(function()
-        Tween(CloseButton, {BackgroundColor3 = self.CurrentTheme.Error}, 0.2)
+        Tween(CloseButton, {BackgroundColor3 = CurrentTheme.Error}, 0.2)
     end)
     
     CloseButton.MouseLeave:Connect(function()
-        Tween(CloseButton, {BackgroundColor3 = self.CurrentTheme.Tertiary}, 0.2)
+        Tween(CloseButton, {BackgroundColor3 = CurrentTheme.Tertiary}, 0.2)
     end)
     
     -- Minimize Button
@@ -327,9 +312,9 @@ function ToastyUI:CreateWindow(config)
         Parent = TitleBar,
         Size = UDim2.new(0, 40, 0, 40),
         Position = UDim2.new(1, -90, 0, 5),
-        BackgroundColor3 = self.CurrentTheme.Tertiary,
+        BackgroundColor3 = CurrentTheme.Tertiary,
         Text = "−",
-        TextColor3 = self.CurrentTheme.Text,
+        TextColor3 = CurrentTheme.Text,
         TextSize = 24,
         Font = Enum.Font.GothamBold,
         BorderSizePixel = 0,
@@ -359,11 +344,11 @@ function ToastyUI:CreateWindow(config)
     MinimizeButton.MouseButton1Click:Connect(ToggleMinimize)
     
     MinimizeButton.MouseEnter:Connect(function()
-        Tween(MinimizeButton, {BackgroundColor3 = self.CurrentTheme.Accent}, 0.2)
+        Tween(MinimizeButton, {BackgroundColor3 = CurrentTheme.Accent}, 0.2)
     end)
     
     MinimizeButton.MouseLeave:Connect(function()
-        Tween(MinimizeButton, {BackgroundColor3 = self.CurrentTheme.Tertiary}, 0.2)
+        Tween(MinimizeButton, {BackgroundColor3 = CurrentTheme.Tertiary}, 0.2)
     end)
     
     -- Toggle keybind
@@ -458,7 +443,7 @@ function ToastyUI:CreateWindow(config)
             Name = tabTitle,
             Parent = TabContainer,
             Size = UDim2.new(1, 0, 0, 40),
-            BackgroundColor3 = self.CurrentTheme.Tertiary,
+            BackgroundColor3 = ToastyUI.CurrentTheme.Tertiary,
             Text = "",
             BorderSizePixel = 0,
         }, {
@@ -471,7 +456,7 @@ function ToastyUI:CreateWindow(config)
                 Position = UDim2.new(0, 10, 0, 0),
                 BackgroundTransparency = 1,
                 Text = tabTitle,
-                TextColor3 = self.CurrentTheme.TextDark,
+                TextColor3 = ToastyUI.CurrentTheme.TextDark,
                 TextSize = 14,
                 Font = Enum.Font.GothamBold,
                 TextXAlignment = Enum.TextXAlignment.Left,
@@ -505,25 +490,25 @@ function ToastyUI:CreateWindow(config)
         TabButton.MouseButton1Click:Connect(function()
             for _, tab in pairs(WindowObject.Tabs) do
                 tab.Content.Visible = false
-                tab.Button.BackgroundColor3 = self.CurrentTheme.Tertiary
-                tab.Button.Label.TextColor3 = self.CurrentTheme.TextDark
+                tab.Button.BackgroundColor3 = ToastyUI.CurrentTheme.Tertiary
+                tab.Button.Label.TextColor3 = ToastyUI.CurrentTheme.TextDark
             end
             
             TabContent.Visible = true
-            TabButton.BackgroundColor3 = self.CurrentTheme.Accent
-            TabButton.Label.TextColor3 = self.CurrentTheme.Text
+            TabButton.BackgroundColor3 = ToastyUI.CurrentTheme.Accent
+            TabButton.Label.TextColor3 = ToastyUI.CurrentTheme.Text
             WindowObject.CurrentTab = TabObject
         end)
         
         TabButton.MouseEnter:Connect(function()
             if WindowObject.CurrentTab ~= TabObject then
-                Tween(TabButton, {BackgroundColor3 = self.CurrentTheme.Secondary}, 0.2)
+                Tween(TabButton, {BackgroundColor3 = ToastyUI.CurrentTheme.Secondary}, 0.2)
             end
         end)
         
         TabButton.MouseLeave:Connect(function()
             if WindowObject.CurrentTab ~= TabObject then
-                Tween(TabButton, {BackgroundColor3 = self.CurrentTheme.Tertiary}, 0.2)
+                Tween(TabButton, {BackgroundColor3 = ToastyUI.CurrentTheme.Tertiary}, 0.2)
             end
         end)
         
@@ -548,7 +533,7 @@ function ToastyUI:CreateWindow(config)
                     Size = UDim2.new(1, 0, 1, 0),
                     BackgroundTransparency = 1,
                     Text = sectionTitle,
-                    TextColor3 = self.CurrentTheme.Text,
+                    TextColor3 = CurrentTheme.Text,
                     TextSize = 16,
                     Font = Enum.Font.GothamBold,
                     TextXAlignment = Enum.TextXAlignment.Left,
@@ -568,7 +553,7 @@ function ToastyUI:CreateWindow(config)
                 Name = "Button",
                 Parent = TabContent,
                 Size = UDim2.new(1, 0, 0, 45),
-                BackgroundColor3 = self.CurrentTheme.Secondary,
+                BackgroundColor3 = CurrentTheme.Secondary,
                 BorderSizePixel = 0,
             }, {
                 New("UICorner", {
@@ -583,7 +568,7 @@ function ToastyUI:CreateWindow(config)
                 Position = UDim2.new(0, 10, 0, 0),
                 BackgroundTransparency = 1,
                 Text = buttonTitle,
-                TextColor3 = self.CurrentTheme.Text,
+                TextColor3 = CurrentTheme.Text,
                 TextSize = 14,
                 Font = Enum.Font.GothamBold,
                 TextXAlignment = Enum.TextXAlignment.Left,
@@ -600,7 +585,7 @@ function ToastyUI:CreateWindow(config)
                     Position = UDim2.new(0, 10, 0, 25),
                     BackgroundTransparency = 1,
                     Text = buttonDesc,
-                    TextColor3 = self.CurrentTheme.TextDark,
+                    TextColor3 = CurrentTheme.TextDark,
                     TextSize = 12,
                     Font = Enum.Font.Gotham,
                     TextXAlignment = Enum.TextXAlignment.Left,
@@ -612,9 +597,9 @@ function ToastyUI:CreateWindow(config)
                 Parent = ButtonFrame,
                 Size = UDim2.new(0, 100, 0, 30),
                 Position = UDim2.new(1, -110, 0.5, -15),
-                BackgroundColor3 = self.CurrentTheme.Accent,
+                BackgroundColor3 = CurrentTheme.Accent,
                 Text = "Click",
-                TextColor3 = self.CurrentTheme.Text,
+                TextColor3 = CurrentTheme.Text,
                 TextSize = 14,
                 Font = Enum.Font.GothamBold,
                 BorderSizePixel = 0,
@@ -626,17 +611,17 @@ function ToastyUI:CreateWindow(config)
             
             ClickButton.MouseButton1Click:Connect(function()
                 pcall(callback)
-                Tween(ClickButton, {BackgroundColor3 = self.CurrentTheme.AccentHover}, 0.1)
+                Tween(ClickButton, {BackgroundColor3 = CurrentTheme.AccentHover}, 0.1)
                 task.wait(0.1)
-                Tween(ClickButton, {BackgroundColor3 = self.CurrentTheme.Accent}, 0.1)
+                Tween(ClickButton, {BackgroundColor3 = CurrentTheme.Accent}, 0.1)
             end)
             
             ClickButton.MouseEnter:Connect(function()
-                Tween(ClickButton, {BackgroundColor3 = self.CurrentTheme.AccentHover}, 0.2)
+                Tween(ClickButton, {BackgroundColor3 = CurrentTheme.AccentHover}, 0.2)
             end)
             
             ClickButton.MouseLeave:Connect(function()
-                Tween(ClickButton, {BackgroundColor3 = self.CurrentTheme.Accent}, 0.2)
+                Tween(ClickButton, {BackgroundColor3 = CurrentTheme.Accent}, 0.2)
             end)
             
             return ButtonFrame
@@ -655,7 +640,7 @@ function ToastyUI:CreateWindow(config)
                 Name = "Toggle",
                 Parent = TabContent,
                 Size = UDim2.new(1, 0, 0, 45),
-                BackgroundColor3 = self.CurrentTheme.Secondary,
+                BackgroundColor3 = CurrentTheme.Secondary,
                 BorderSizePixel = 0,
             }, {
                 New("UICorner", {
@@ -670,7 +655,7 @@ function ToastyUI:CreateWindow(config)
                 Position = UDim2.new(0, 10, 0, 0),
                 BackgroundTransparency = 1,
                 Text = toggleTitle,
-                TextColor3 = self.CurrentTheme.Text,
+                TextColor3 = CurrentTheme.Text,
                 TextSize = 14,
                 Font = Enum.Font.GothamBold,
                 TextXAlignment = Enum.TextXAlignment.Left,
@@ -687,7 +672,7 @@ function ToastyUI:CreateWindow(config)
                     Position = UDim2.new(0, 10, 0, 25),
                     BackgroundTransparency = 1,
                     Text = toggleDesc,
-                    TextColor3 = self.CurrentTheme.TextDark,
+                    TextColor3 = CurrentTheme.TextDark,
                     TextSize = 12,
                     Font = Enum.Font.Gotham,
                     TextXAlignment = Enum.TextXAlignment.Left,
@@ -699,7 +684,7 @@ function ToastyUI:CreateWindow(config)
                 Parent = ToggleFrame,
                 Size = UDim2.new(0, 45, 0, 25),
                 Position = UDim2.new(1, -55, 0.5, -12.5),
-                BackgroundColor3 = toggled and self.CurrentTheme.Accent or self.CurrentTheme.Tertiary,
+                BackgroundColor3 = toggled and CurrentTheme.Accent or CurrentTheme.Tertiary,
                 BorderSizePixel = 0,
             }, {
                 New("UICorner", {
@@ -712,7 +697,7 @@ function ToastyUI:CreateWindow(config)
                 Parent = ToggleOuter,
                 Size = UDim2.new(0, 19, 0, 19),
                 Position = toggled and UDim2.new(1, -22, 0.5, -9.5) or UDim2.new(0, 3, 0.5, -9.5),
-                BackgroundColor3 = self.CurrentTheme.Text,
+                BackgroundColor3 = CurrentTheme.Text,
                 BorderSizePixel = 0,
             }, {
                 New("UICorner", {
@@ -732,7 +717,7 @@ function ToastyUI:CreateWindow(config)
                 toggled = state
                 pcall(callback, toggled)
                 
-                Tween(ToggleOuter, {BackgroundColor3 = toggled and self.CurrentTheme.Accent or self.CurrentTheme.Tertiary}, 0.2)
+                Tween(ToggleOuter, {BackgroundColor3 = toggled and CurrentTheme.Accent or CurrentTheme.Tertiary}, 0.2)
                 Tween(ToggleInner, {Position = toggled and UDim2.new(1, -22, 0.5, -9.5) or UDim2.new(0, 3, 0.5, -9.5)}, 0.2)
             end
             
@@ -765,7 +750,7 @@ function ToastyUI:CreateWindow(config)
                 Name = "Slider",
                 Parent = TabContent,
                 Size = UDim2.new(1, 0, 0, 60),
-                BackgroundColor3 = self.CurrentTheme.Secondary,
+                BackgroundColor3 = CurrentTheme.Secondary,
                 BorderSizePixel = 0,
             }, {
                 New("UICorner", {
@@ -780,7 +765,7 @@ function ToastyUI:CreateWindow(config)
                 Position = UDim2.new(0, 10, 0, 5),
                 BackgroundTransparency = 1,
                 Text = sliderTitle,
-                TextColor3 = self.CurrentTheme.Text,
+                TextColor3 = CurrentTheme.Text,
                 TextSize = 14,
                 Font = Enum.Font.GothamBold,
                 TextXAlignment = Enum.TextXAlignment.Left,
@@ -794,7 +779,7 @@ function ToastyUI:CreateWindow(config)
                     Position = UDim2.new(0, 10, 0, 25),
                     BackgroundTransparency = 1,
                     Text = sliderDesc,
-                    TextColor3 = self.CurrentTheme.TextDark,
+                    TextColor3 = CurrentTheme.TextDark,
                     TextSize = 12,
                     Font = Enum.Font.Gotham,
                     TextXAlignment = Enum.TextXAlignment.Left,
@@ -808,7 +793,7 @@ function ToastyUI:CreateWindow(config)
                 Position = UDim2.new(1, -90, 0, 5),
                 BackgroundTransparency = 1,
                 Text = tostring(value) .. suffix,
-                TextColor3 = self.CurrentTheme.Accent,
+                TextColor3 = CurrentTheme.Accent,
                 TextSize = 14,
                 Font = Enum.Font.GothamBold,
                 TextXAlignment = Enum.TextXAlignment.Right,
@@ -819,7 +804,7 @@ function ToastyUI:CreateWindow(config)
                 Parent = SliderFrame,
                 Size = UDim2.new(1, -20, 0, 4),
                 Position = UDim2.new(0, 10, 1, -12),
-                BackgroundColor3 = self.CurrentTheme.Tertiary,
+                BackgroundColor3 = CurrentTheme.Tertiary,
                 BorderSizePixel = 0,
             }, {
                 New("UICorner", {
@@ -831,7 +816,7 @@ function ToastyUI:CreateWindow(config)
                 Name = "Fill",
                 Parent = SliderBar,
                 Size = UDim2.new((value - min) / (max - min), 0, 1, 0),
-                BackgroundColor3 = self.CurrentTheme.Accent,
+                BackgroundColor3 = CurrentTheme.Accent,
                 BorderSizePixel = 0,
             }, {
                 New("UICorner", {
@@ -844,7 +829,7 @@ function ToastyUI:CreateWindow(config)
                 Parent = SliderBar,
                 Size = UDim2.new(0, 14, 0, 14),
                 Position = UDim2.new((value - min) / (max - min), -7, 0.5, -7),
-                BackgroundColor3 = self.CurrentTheme.Text,
+                BackgroundColor3 = CurrentTheme.Text,
                 BorderSizePixel = 0,
             }, {
                 New("UICorner", {
@@ -913,7 +898,7 @@ function ToastyUI:CreateWindow(config)
                 Name = "Dropdown",
                 Parent = TabContent,
                 Size = UDim2.new(1, 0, 0, 45),
-                BackgroundColor3 = self.CurrentTheme.Secondary,
+                BackgroundColor3 = CurrentTheme.Secondary,
                 BorderSizePixel = 0,
                 ClipsDescendants = true,
             }, {
@@ -929,7 +914,7 @@ function ToastyUI:CreateWindow(config)
                 Position = UDim2.new(0, 10, 0, 0),
                 BackgroundTransparency = 1,
                 Text = dropdownTitle,
-                TextColor3 = self.CurrentTheme.Text,
+                TextColor3 = CurrentTheme.Text,
                 TextSize = 14,
                 Font = Enum.Font.GothamBold,
                 TextXAlignment = Enum.TextXAlignment.Left,
@@ -946,7 +931,7 @@ function ToastyUI:CreateWindow(config)
                     Position = UDim2.new(0, 10, 0, 25),
                     BackgroundTransparency = 1,
                     Text = dropdownDesc,
-                    TextColor3 = self.CurrentTheme.TextDark,
+                    TextColor3 = CurrentTheme.TextDark,
                     TextSize = 12,
                     Font = Enum.Font.Gotham,
                     TextXAlignment = Enum.TextXAlignment.Left,
@@ -958,9 +943,9 @@ function ToastyUI:CreateWindow(config)
                 Parent = DropdownFrame,
                 Size = UDim2.new(0, 100, 0, 30),
                 Position = UDim2.new(1, -110, 0, 7.5),
-                BackgroundColor3 = self.CurrentTheme.Tertiary,
+                BackgroundColor3 = CurrentTheme.Tertiary,
                 Text = selected,
-                TextColor3 = self.CurrentTheme.Text,
+                TextColor3 = CurrentTheme.Text,
                 TextSize = 13,
                 Font = Enum.Font.Gotham,
                 BorderSizePixel = 0,
@@ -989,9 +974,9 @@ function ToastyUI:CreateWindow(config)
                     Name = option,
                     Parent = OptionsContainer,
                     Size = UDim2.new(1, 0, 0, 30),
-                    BackgroundColor3 = self.CurrentTheme.Tertiary,
+                    BackgroundColor3 = CurrentTheme.Tertiary,
                     Text = option,
-                    TextColor3 = self.CurrentTheme.Text,
+                    TextColor3 = CurrentTheme.Text,
                     TextSize = 13,
                     Font = Enum.Font.Gotham,
                     BorderSizePixel = 0,
@@ -1011,11 +996,11 @@ function ToastyUI:CreateWindow(config)
                 end)
                 
                 OptionButton.MouseEnter:Connect(function()
-                    Tween(OptionButton, {BackgroundColor3 = self.CurrentTheme.Accent}, 0.2)
+                    Tween(OptionButton, {BackgroundColor3 = CurrentTheme.Accent}, 0.2)
                 end)
                 
                 OptionButton.MouseLeave:Connect(function()
-                    Tween(OptionButton, {BackgroundColor3 = self.CurrentTheme.Tertiary}, 0.2)
+                    Tween(OptionButton, {BackgroundColor3 = CurrentTheme.Tertiary}, 0.2)
                 end)
             end
             
@@ -1057,7 +1042,7 @@ function ToastyUI:CreateWindow(config)
                 Name = "Input",
                 Parent = TabContent,
                 Size = UDim2.new(1, 0, 0, 45),
-                BackgroundColor3 = self.CurrentTheme.Secondary,
+                BackgroundColor3 = CurrentTheme.Secondary,
                 BorderSizePixel = 0,
             }, {
                 New("UICorner", {
@@ -1072,7 +1057,7 @@ function ToastyUI:CreateWindow(config)
                 Position = UDim2.new(0, 10, 0, 0),
                 BackgroundTransparency = 1,
                 Text = inputTitle,
-                TextColor3 = self.CurrentTheme.Text,
+                TextColor3 = CurrentTheme.Text,
                 TextSize = 14,
                 Font = Enum.Font.GothamBold,
                 TextXAlignment = Enum.TextXAlignment.Left,
@@ -1089,7 +1074,7 @@ function ToastyUI:CreateWindow(config)
                     Position = UDim2.new(0, 10, 0, 25),
                     BackgroundTransparency = 1,
                     Text = inputDesc,
-                    TextColor3 = self.CurrentTheme.TextDark,
+                    TextColor3 = CurrentTheme.TextDark,
                     TextSize = 12,
                     Font = Enum.Font.Gotham,
                     TextXAlignment = Enum.TextXAlignment.Left,
@@ -1101,11 +1086,11 @@ function ToastyUI:CreateWindow(config)
                 Parent = InputFrame,
                 Size = UDim2.new(0, 130, 0, 30),
                 Position = UDim2.new(1, -140, 0.5, -15),
-                BackgroundColor3 = self.CurrentTheme.Tertiary,
+                BackgroundColor3 = CurrentTheme.Tertiary,
                 Text = default,
                 PlaceholderText = placeholder,
-                TextColor3 = self.CurrentTheme.Text,
-                PlaceholderColor3 = self.CurrentTheme.TextDark,
+                TextColor3 = CurrentTheme.Text,
+                PlaceholderColor3 = CurrentTheme.TextDark,
                 TextSize = 13,
                 Font = Enum.Font.Gotham,
                 BorderSizePixel = 0,
@@ -1139,7 +1124,7 @@ function ToastyUI:CreateWindow(config)
                 Name = "Keybind",
                 Parent = TabContent,
                 Size = UDim2.new(1, 0, 0, 45),
-                BackgroundColor3 = self.CurrentTheme.Secondary,
+                BackgroundColor3 = CurrentTheme.Secondary,
                 BorderSizePixel = 0,
             }, {
                 New("UICorner", {
@@ -1154,7 +1139,7 @@ function ToastyUI:CreateWindow(config)
                 Position = UDim2.new(0, 10, 0, 0),
                 BackgroundTransparency = 1,
                 Text = keybindTitle,
-                TextColor3 = self.CurrentTheme.Text,
+                TextColor3 = CurrentTheme.Text,
                 TextSize = 14,
                 Font = Enum.Font.GothamBold,
                 TextXAlignment = Enum.TextXAlignment.Left,
@@ -1171,7 +1156,7 @@ function ToastyUI:CreateWindow(config)
                     Position = UDim2.new(0, 10, 0, 25),
                     BackgroundTransparency = 1,
                     Text = keybindDesc,
-                    TextColor3 = self.CurrentTheme.TextDark,
+                    TextColor3 = CurrentTheme.TextDark,
                     TextSize = 12,
                     Font = Enum.Font.Gotham,
                     TextXAlignment = Enum.TextXAlignment.Left,
@@ -1183,9 +1168,9 @@ function ToastyUI:CreateWindow(config)
                 Parent = KeybindFrame,
                 Size = UDim2.new(0, 100, 0, 30),
                 Position = UDim2.new(1, -110, 0.5, -15),
-                BackgroundColor3 = self.CurrentTheme.Tertiary,
+                BackgroundColor3 = CurrentTheme.Tertiary,
                 Text = currentKey.Name,
-                TextColor3 = self.CurrentTheme.Text,
+                TextColor3 = CurrentTheme.Text,
                 TextSize = 13,
                 Font = Enum.Font.GothamBold,
                 BorderSizePixel = 0,
@@ -1198,14 +1183,14 @@ function ToastyUI:CreateWindow(config)
             KeyButton.MouseButton1Click:Connect(function()
                 waitingForKey = true
                 KeyButton.Text = "..."
-                KeyButton.BackgroundColor3 = self.CurrentTheme.Accent
+                KeyButton.BackgroundColor3 = CurrentTheme.Accent
             end)
             
             UserInputService.InputBegan:Connect(function(input, gameProcessed)
                 if waitingForKey and input.UserInputType == Enum.UserInputType.Keyboard then
                     currentKey = input.KeyCode
                     KeyButton.Text = currentKey.Name
-                    KeyButton.BackgroundColor3 = self.CurrentTheme.Tertiary
+                    KeyButton.BackgroundColor3 = CurrentTheme.Tertiary
                     waitingForKey = false
                     pcall(callback, currentKey)
                 end
@@ -1226,7 +1211,7 @@ function ToastyUI:CreateWindow(config)
                 Name = "Paragraph",
                 Parent = TabContent,
                 Size = UDim2.new(1, 0, 0, 60),
-                BackgroundColor3 = self.CurrentTheme.Secondary,
+                BackgroundColor3 = CurrentTheme.Secondary,
                 BorderSizePixel = 0,
             }, {
                 New("UICorner", {
@@ -1238,7 +1223,7 @@ function ToastyUI:CreateWindow(config)
                     Position = UDim2.new(0, 10, 0, 5),
                     BackgroundTransparency = 1,
                     Text = paragraphTitle,
-                    TextColor3 = self.CurrentTheme.Text,
+                    TextColor3 = CurrentTheme.Text,
                     TextSize = 14,
                     Font = Enum.Font.GothamBold,
                     TextXAlignment = Enum.TextXAlignment.Left,
@@ -1249,7 +1234,7 @@ function ToastyUI:CreateWindow(config)
                     Position = UDim2.new(0, 10, 0, 25),
                     BackgroundTransparency = 1,
                     Text = paragraphDesc,
-                    TextColor3 = self.CurrentTheme.TextDark,
+                    TextColor3 = CurrentTheme.TextDark,
                     TextSize = 13,
                     Font = Enum.Font.Gotham,
                     TextXAlignment = Enum.TextXAlignment.Left,
@@ -1267,7 +1252,7 @@ function ToastyUI:CreateWindow(config)
                 Name = "Divider",
                 Parent = TabContent,
                 Size = UDim2.new(1, 0, 0, 1),
-                BackgroundColor3 = self.CurrentTheme.Border,
+                BackgroundColor3 = CurrentTheme.Border,
                 BorderSizePixel = 0,
             })
             
@@ -1287,3 +1272,5 @@ function ToastyUI:CreateWindow(config)
 end
 
 return ToastyUI
+
+
