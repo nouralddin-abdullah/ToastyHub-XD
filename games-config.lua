@@ -18,7 +18,6 @@ return {
         premium = false, -- true = requires key, false = free
         icon = "🌱"
     },
-    
     {
         name = "Basketball:Zero",
         gameId = 123456789, -- Replace with actual game ID
