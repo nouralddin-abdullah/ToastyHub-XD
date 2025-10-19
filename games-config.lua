@@ -40,5 +40,12 @@ return {
         scriptUrl = "https://raw.githubusercontent.com/nouralddin-abdullah/Blue-Lock-Rivals/refs/heads/main/entrymob.lua",
         premium = false, -- true = requires key, false = free
         icon = "⚽"
+    },
+    {
+        name = "Skateboard Obby",
+        gameId = 123456789, -- Replace with actual game ID
+        scriptUrl = "https://raw.githubusercontent.com/nouralddin-abdullah/Skateboard-game/refs/heads/main/entry.lua",
+        premium = false, -- true = requires key, false = free
+        icon = "🛹"
     }
 }
