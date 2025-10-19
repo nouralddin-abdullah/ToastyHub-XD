@@ -33,5 +33,12 @@ return {
         scriptUrl = "https://raw.githubusercontent.com/nouralddin-abdullah/Violance/refs/heads/main/main.lua",
         premium = false, -- true = requires key, false = free
         icon = "🔪"
+    },
+    {
+        name = "Blue Lock (NOT ALL EXECUTORS!!)",
+        gameId = 123456789, -- Replace with actual game ID
+        scriptUrl = "https://raw.githubusercontent.com/nouralddin-abdullah/Blue-Lock-Rivals/refs/heads/main/entrymob.lua",
+        premium = false, -- true = requires key, false = free
+        icon = "⚽"
     }
 }
