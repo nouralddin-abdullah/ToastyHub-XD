@@ -7,6 +7,13 @@ return {
         icon = "♾️"
     },
     {
+        name = "Free Executors - Universal Aimbot - ESP",
+        gameId = 123456789, -- Replace with actual game ID
+        scriptUrl = "https://raw.githubusercontent.com/nouralddin-abdullah/Universal-Aimbot---ESP/refs/heads/main/AimbotV3-FreeExecutors.lua",
+        premium = true, -- true = requires key, false = free
+        icon = "♾️"
+    },
+    {
         name = "99 Nights (EXECUTE IN FOREST ✅ NOT LOBBY ❌)",
         gameId = 123456789, -- Replace with actual game ID
         scriptUrl = "https://raw.githubusercontent.com/nouralddin-abdullah/99-night/refs/heads/main/main-en-script.lua",
