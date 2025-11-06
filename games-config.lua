@@ -9,7 +9,7 @@ return {
     {
         name = "Trash Executors - Universal Aimbot - ESP",
         gameId = 123456789, -- Replace with actual game ID
-        scriptUrl = "https://raw.githubusercontent.com/nouralddin-abdullah/Universal-Aimbot---ESP/refs/heads/main/AimbotV3-FreeExecutors.lua",
+        scriptUrl = "https://raw.githubusercontent.com/nouralddin-abdullah/Universal-Aimbot---ESP/refs/heads/main/main-free-executor.lua",
         premium = true, -- true = requires key, false = free
         icon = "♾️"
     },
