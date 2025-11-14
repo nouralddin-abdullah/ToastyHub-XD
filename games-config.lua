@@ -35,6 +35,13 @@ return {
         icon = "🏀"
     },
     {
+        name = "Blade Ball",
+        gameId = 123456789, -- Replace with actual game ID
+        scriptUrl = "https://raw.githubusercontent.com/nouralddin-abdullah/Shittyscripts/refs/heads/main/Blade%20ball.lua",
+        premium = false, -- true = requires key, false = free
+        icon = "💥"
+    },
+    {
         name = "Violence District",
         gameId = 123456789, -- Replace with actual game ID
         scriptUrl = "https://raw.githubusercontent.com/nouralddin-abdullah/Violance/refs/heads/main/main.lua",
